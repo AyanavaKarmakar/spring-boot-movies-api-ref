@@ -1,6 +1,5 @@
 package software.ayanavakarmakar.movies.services;
 
-import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import software.ayanavakarmakar.movies.models.Movie;
 import software.ayanavakarmakar.movies.repositories.MovieRepository;
