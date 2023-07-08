@@ -1,4 +1,4 @@
-package software.ayanavakarmakar.movies;
+package software.ayanavakarmakar.movies.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
