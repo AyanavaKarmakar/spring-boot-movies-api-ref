@@ -11,6 +11,7 @@ import software.ayanavakarmakar.movies.services.MovieService;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.mockito.Mockito.when;
@@ -85,6 +86,43 @@ public class MovieControllerTest {
                 .andExpect(jsonPath("$[1].backdrops", containsInAnyOrder(
                         "https://image.tmdb.org/t/p/original/s16H6tpK2utvwDtzZ8Qy4qm5Emw.jpg",
                         "https://image.tmdb.org/t/p/original/evaFLqtswezLosllRZtJNMiO1UR.jpg"
+                )));
+    }
+
+    @Test
+    public void testGetMovieById() throws Exception {
+        // create a single movie object
+        Movie movie = new Movie();
+        movie.setImdbId("tt3915174");
+        movie.setTitle("Puss in Boots: The Last Wish");
+        movie.setReleaseDate("2022-12-21");
+        movie.setTrailerLink("https://www.youtube.com/watch?v=tHb7WlgyaUc");
+        movie.setGenres(Arrays.asList("Animation", "Action", "Adventure", "Comedy", "Family"));
+        movie.setPoster("https://image.tmdb.org/t/p/w500/1NqwE6LP9IEdOZ57NCT51ftHtWT.jpg");
+        movie.setBackdrops(Arrays.asList(
+                "https://image.tmdb.org/t/p/original/r9PkFnRUIthgBp2JZZzD380MWZy.jpg",
+                "https://image.tmdb.org/t/p/original/faXT8V80JRhnArTAeYXz0Eutpv9.jpg"
+        ));
+
+        // mock the movie service to return the specific movie by id
+        String movieImdbId = "tt3915174";
+        when(movieService.fetchSingleMovieDetails(movieImdbId)).thenReturn(Optional.of(movie));
+
+        // perform the GET request to the endpoint
+        mockMvc.perform(get("/api/v1/movies/{movieImdbId}", movieImdbId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("imdbId").value("tt3915174"))
+                .andExpect(jsonPath("title").value("Puss in Boots: The Last Wish"))
+                .andExpect(jsonPath("releaseDate").value("2022-12-21"))
+                .andExpect(jsonPath("trailerLink").value("https://www.youtube.com/watch?v=tHb7WlgyaUc"))
+                .andExpect(jsonPath("genres").isArray())
+                .andExpect(jsonPath("genres", containsInAnyOrder("Animation", "Action", "Adventure", "Comedy", "Family")))
+                .andExpect(jsonPath("poster").value("https://image.tmdb.org/t/p/w500/1NqwE6LP9IEdOZ57NCT51ftHtWT.jpg"))
+                .andExpect(jsonPath("backdrops").isArray())
+                .andExpect(jsonPath("backdrops", containsInAnyOrder(
+                        "https://image.tmdb.org/t/p/original/r9PkFnRUIthgBp2JZZzD380MWZy.jpg",
+                        "https://image.tmdb.org/t/p/original/faXT8V80JRhnArTAeYXz0Eutpv9.jpg"
                 )));
     }
 }
