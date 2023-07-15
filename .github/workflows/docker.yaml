@@ -16,19 +16,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Build Docker image
-        run: docker build -t spring-boot-movies-api .
-
-      - name: Run Docker container
-        run: docker run --name spring-boot-movies -d spring-boot-movies-api
-
-      - name: Execute Maven command inside the container
-        run: docker exec spring-boot-movies mvn clean package -DskipTests
-
-      - name: Copy artifacts from the container
-        run: docker cp spring-boot-movies:/target/movies-0.0.1-SNAPSHOT.jar movies.jar
-
-      - name: Stop and remove the container
+      - name: Build and test with Docker
         run: |
-          docker stop spring-boot-movies
-          docker rm spring-boot-movies
+          docker build -t spring-boot-movies-api .
+#         docker run spring-boot-movies-api mvn clean package -DskipTests
