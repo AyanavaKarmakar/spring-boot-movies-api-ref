@@ -6,7 +6,7 @@
 
 - ### API is deployed on Render via Docker - https://spring-boot-movies-api-xlvr.onrender.com/api/v1/movies
 
-- ### Run Test
+- ### Run All Tests
 
     ```bash
     mvn -B test --file pom.xml
