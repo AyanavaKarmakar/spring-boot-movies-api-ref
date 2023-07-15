@@ -1,11 +1,14 @@
-# https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven#building-and-testing-your-code
+name: Java CI with Maven
 
-name: Java CI
-
-on: [ push ]
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
 
     steps:
@@ -15,5 +18,6 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: maven
       - name: Build with Maven
-        run: mvn --batch-mode --update-snapshots package
+        run: mvn -B package --file pom.xml
