@@ -9,5 +9,5 @@
 - ### Run All Tests
 
     ```bash
-    mvn -B test --file pom.xml
+    mvn test
     ```
