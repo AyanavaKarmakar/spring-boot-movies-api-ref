@@ -19,4 +19,3 @@ jobs:
       - name: Build and test with Docker
         run: |
           docker build -t spring-boot-movies-api .
-#         docker run spring-boot-movies-api mvn clean package -DskipTests
