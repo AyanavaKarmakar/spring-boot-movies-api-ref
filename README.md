@@ -5,3 +5,9 @@
 - ### API Docs via OpenAPI & Swagger UI - https://spring-boot-movies-api-xlvr.onrender.com/swagger-ui/index.html
 
 - ### API is deployed on Render via Docker - https://spring-boot-movies-api-xlvr.onrender.com/api/v1/movies
+
+- ### Run All Tests
+
+    ```bash
+    mvn test
+    ```
