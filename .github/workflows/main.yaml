@@ -8,8 +8,13 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+
+    env:
+      MONGODB_NAME: ${{ secrets.MONGODB_NAME }}
+      MONGODB_USER: ${{ secrets.MONGODB_USER }}
+      MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
+      MONGODB_CLUSTER: ${{ secrets.MONGODB_CLUSTER }}
 
     steps:
       - uses: actions/checkout@v2
@@ -20,16 +25,6 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Check Maven build
-        env:
-          MONGODB_NAME: ${{ secrets.MONGODB_NAME }}
-          MONGODB_USER: ${{ secrets.MONGODB_USER }}
-          MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
-          MONGODB_CLUSTER: ${{ secrets.MONGODB_CLUSTER }}
         run: mvn --batch-mode --update-snapshots package
       - name: Run Maven tests
-        env:
-          MONGODB_NAME: ${{ secrets.MONGODB_NAME }}
-          MONGODB_USER: ${{ secrets.MONGODB_USER }}
-          MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
-          MONGODB_CLUSTER: ${{ secrets.MONGODB_CLUSTER }}
         run: mvn test
