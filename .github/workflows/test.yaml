@@ -1,34 +1,22 @@
-name: Java CI with Maven
+name: Docker CI
 
 on:
   push:
-    branches: [ "master" ]
+    branches:
+      - master
   pull_request:
-    branches: [ "master" ]
+    branches:
+      - master
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-          cache: maven
-      - name: Set up environment variables
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Build and test with Docker
         run: |
-          echo "MONGODB_NAME=test1" >> $GITHUB_ENV
-          echo "MONGODB_USER=test2" >> $GITHUB_ENV
-          echo "MONGODB_PASSWORD=test3" >> $GITHUB_ENV
-          echo "MONGODB_CLUSTER=test4" >> $GITHUB_ENV
-      - name: Build with Maven
-        env:
-          MONGODB_NAME: ${{ env.MONGODB_NAME }}
-          MONGODB_USER: ${{ env.MONGODB_USER }}
-          MONGODB_PASSWORD: ${{ env.MONGODB_PASSWORD }}
-          MONGODB_CLUSTER: ${{ env.MONGODB_CLUSTER }}
-        run: mvn -B package --file pom.xml
+          docker build -t spring-boot-movies-api .
+          docker run spring-boot-movies-api mvn clean test
