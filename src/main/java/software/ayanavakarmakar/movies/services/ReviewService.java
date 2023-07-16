@@ -1,5 +1,6 @@
 package software.ayanavakarmakar.movies.services;
 
+import com.mongodb.BasicDBObject;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -59,6 +60,25 @@ public class ReviewService {
             mongoTemplate.updateFirst(movieQuery, movieUpdate, Movie.class);
 
             return review;
+        } else {
+            throw new NoSuchElementException("Review with id " + id + " not found!");
+        }
+    }
+
+    public boolean deleteReview(ObjectId id) {
+        Optional<Review> reviewOptional = reviewRepository.findReviewById(id);
+        if (reviewOptional.isPresent()) {
+            Review review = reviewOptional.get();
+
+            // delete the review
+            reviewRepository.delete(review);
+
+            // update the associated movie document
+            Query movieQuery = new Query(Criteria.where("reviewIds._id").is(id));
+            Update movieUpdate = new Update().pull("reviewIds", new BasicDBObject("_id", id));
+
+            mongoTemplate.updateFirst(movieQuery, movieUpdate, Movie.class);
+            return true;
         } else {
             throw new NoSuchElementException("Review with id " + id + " not found!");
         }
