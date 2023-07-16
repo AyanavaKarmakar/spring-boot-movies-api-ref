@@ -34,6 +34,16 @@ public class ReviewService {
         return review;
     }
 
+    public Review findSingleReview(ObjectId id) {
+        Optional<Review> reviewOptional = reviewRepository.findReviewById(id);
+
+        if (reviewOptional.isPresent()) {
+            return reviewOptional.get();
+        } else {
+            throw new NoSuchElementException("Review with id " + id + " not found!");
+        }
+    }
+
     public Review updateReview(ObjectId id, String reviewBody) {
         Optional<Review> reviewOptional = reviewRepository.findReviewById(id);
 
