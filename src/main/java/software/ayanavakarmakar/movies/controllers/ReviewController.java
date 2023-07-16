@@ -1,5 +1,6 @@
 package software.ayanavakarmakar.movies.controllers;
 
+import org.bson.types.ObjectId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class ReviewController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Review> putUpdateReview(@PathVariable String id, @RequestBody Map<String, String> payload) {
+    public ResponseEntity<Review> putUpdateReview(@PathVariable ObjectId id, @RequestBody Map<String, String> payload) {
         try {
             return new ResponseEntity<>(reviewService.updateReview(
                     id, payload.get("reviewBody")), HttpStatus.OK);

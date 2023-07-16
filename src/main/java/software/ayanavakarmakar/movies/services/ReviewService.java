@@ -1,5 +1,6 @@
 package software.ayanavakarmakar.movies.services;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -33,7 +34,7 @@ public class ReviewService {
         return review;
     }
 
-    public Review updateReview(String id, String reviewBody) {
+    public Review updateReview(ObjectId id, String reviewBody) {
         Optional<Review> reviewOptional = reviewRepository.findReviewById(id);
 
         if (reviewOptional.isPresent()) {
