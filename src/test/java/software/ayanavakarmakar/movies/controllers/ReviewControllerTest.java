@@ -73,4 +73,26 @@ public class ReviewControllerTest {
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertNull(response.getBody());
     }
+
+    @Test
+    public void testUpdateReview_ReviewFound() {
+        // mock the input payload
+        ObjectId reviewId = new ObjectId("64a9bcb8e85d01724f4b12d8");
+        Map<String, String> payload = new HashMap<>();
+        payload.put("reviewBody", "Updated review");
+
+        // mock the review returned by the service
+        Review mockReview = new Review("Updated review");
+        when(reviewService.updateReview(reviewId, payload.get("reviewBody"))).thenReturn(mockReview);
+
+        // make the request to the endpoint
+        ResponseEntity<Review> response = reviewController.putUpdateReview(reviewId, payload);
+
+        // verify the service method was called with correct parameters
+        verify(reviewService, times(1)).updateReview(reviewId, payload.get("reviewBody"));
+
+        // verify the response status and code body
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(mockReview, response.getBody());
+    }
 }
