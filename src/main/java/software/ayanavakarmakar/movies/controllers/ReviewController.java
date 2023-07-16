@@ -1,15 +1,14 @@
 package software.ayanavakarmakar.movies.controllers;
 
+import org.bson.types.ObjectId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import software.ayanavakarmakar.movies.models.Review;
 import software.ayanavakarmakar.movies.services.ReviewService;
 
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/v1/reviews")
@@ -24,5 +23,19 @@ public class ReviewController {
     public ResponseEntity<Review> postNewReview(@RequestBody Map<String, String> payload) {
         return new ResponseEntity<>(reviewService.createReview(
                 payload.get("reviewBody"), payload.get("imdbId")), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Review> putUpdateReview(@PathVariable ObjectId id, @RequestBody Map<String, String> payload) {
+        try {
+            Review updatedReview = reviewService.updateReview(id, payload.get("reviewBody"));
+            if (updatedReview != null) {
+                return new ResponseEntity<>(updatedReview, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            }
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
     }
 }
