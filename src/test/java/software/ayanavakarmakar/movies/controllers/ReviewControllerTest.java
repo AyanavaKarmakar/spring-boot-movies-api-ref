@@ -54,6 +54,45 @@ public class ReviewControllerTest {
     }
 
     @Test
+    public void testGetReviewByID_ReviewNotFound() {
+        // mock the input payload
+        ObjectId reviewId = new ObjectId("123456789012345678901234");
+
+        // mock the review returned by the service as null to indicate not found
+        when(reviewService.findSingleReview(reviewId)).thenReturn(null);
+
+        // make the request to the endpoint
+        ResponseEntity<Review> response = reviewController.getReview(reviewId);
+
+        // verify the service method was called with correct parameters
+        verify(reviewService, times(1)).findSingleReview(reviewId);
+
+        // verify the response status and code body
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
+    }
+
+    @Test
+    public void testGetReviewByID_ReviewFound() {
+        // mock the input payload
+        ObjectId reviewId = new ObjectId("64a9bcb8e85d01724f4b12d8");
+
+        // mock the review returned by the service
+        Review mockReview = new Review("Updated review");
+        when(reviewService.findSingleReview(reviewId)).thenReturn(mockReview);
+
+        // make the request to the endpoint
+        ResponseEntity<Review> response = reviewController.getReview(reviewId);
+
+        // verify the service method was called with correct parameters
+        verify(reviewService, times(1)).findSingleReview(reviewId);
+
+        // verify the response status and code body
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(mockReview, response.getBody());
+    }
+
+    @Test
     public void testUpdateReview_ReviewNotFound() {
         // mock the input payload
         ObjectId reviewId = new ObjectId("123456789012345678901234");
