@@ -25,6 +25,20 @@ public class ReviewController {
                 payload.get("reviewBody"), payload.get("imdbId")), HttpStatus.CREATED);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Review> getReview(@PathVariable ObjectId id) {
+        try {
+            Review review = reviewService.findSingleReview(id);
+            if (review != null) {
+                return new ResponseEntity<>(review, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            }
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Review> putUpdateReview(@PathVariable ObjectId id, @RequestBody Map<String, String> payload) {
         try {
