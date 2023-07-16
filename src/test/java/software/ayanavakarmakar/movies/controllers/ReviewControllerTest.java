@@ -134,4 +134,40 @@ public class ReviewControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(mockReview, response.getBody());
     }
+
+    @Test
+    public void testDeleteReview_ReviewNotFound() {
+        // mock the input payload
+        ObjectId reviewId = new ObjectId("123456789012345678901234");
+
+        // mock the review returned by the service as null to indicate not found
+        when(reviewService.deleteReview(reviewId)).thenReturn(false);
+
+        // make the request to the endpoint
+        ResponseEntity<Void> response = reviewController.deleteReview(reviewId);
+
+        // verify the service method was called with correct parameters
+        verify(reviewService, times(1)).deleteReview(reviewId);
+
+        // verify the response status and code body
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    public void testDeleteReview_ReviewFound() {
+        // mock the input payload
+        ObjectId reviewId = new ObjectId("123456789012345678901234");
+
+        // mock the review returned by the service
+        when(reviewService.deleteReview(reviewId)).thenReturn(true);
+
+        // make the request to the endpoint
+        ResponseEntity<Void> response = reviewController.deleteReview(reviewId);
+
+        // verify the service method was called with correct parameters
+        verify(reviewService, times(1)).deleteReview(reviewId);
+
+        // verify the response status and code body
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+    }
 }
