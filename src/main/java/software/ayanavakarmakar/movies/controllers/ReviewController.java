@@ -28,8 +28,12 @@ public class ReviewController {
     @PutMapping("/{id}")
     public ResponseEntity<Review> putUpdateReview(@PathVariable ObjectId id, @RequestBody Map<String, String> payload) {
         try {
-            return new ResponseEntity<>(reviewService.updateReview(
-                    id, payload.get("reviewBody")), HttpStatus.OK);
+            Review updatedReview = reviewService.updateReview(id, payload.get("reviewBody"));
+            if (updatedReview != null) {
+                return new ResponseEntity<>(updatedReview, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            }
         } catch (NoSuchElementException e) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
